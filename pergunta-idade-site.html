@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Idade nos Planetas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultados {
+            margin-top: 20px;
+        }
+        .idade-planeta {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quantos anos você tem?</h1>
+        <input type="number" id="entradaIdade" placeholder="Digite sua idade aqui">
+        <button onclick="calcularIdades()">Calcular Idades nos Planetas</button>
+        <div id="resultados"></div>
+    </div>
+
+    <script>
+        // Objeto com os dados dos planetas: nome e período orbital em dias terrestres
+        const dadosPlanetas = {
+            'Mercúrio': 87.97,
+            'Vênus': 224.7,
+            'Marte': 686.98,
+            'Júpiter': 4332.59,
+            'Saturno': 10759.22,
+            'Urano': 30688.5,
+            'Netuno': 60195
+        };
+
+        function calcularIdades() {
+            // Obtém a idade inserida pelo usuário e converte para número inteiro
+            const idadeTerra = parseInt(document.getElementById('entradaIdade').value);
+            
+            // Verifica se a idade é válida
+            if (isNaN(idadeTerra) || idadeTerra <= 0) {
+                alert('Por favor, insira uma idade válida.');
+                return;
+            }
+
+            // Obtém o elemento onde os resultados serão exibidos
+            const divResultados = document.getElementById('resultados');
+            divResultados.innerHTML = '<h2>Sua idade em outros planetas:</h2>';
+
+            // Calcula a idade para cada planeta
+            for (const [planeta, periodoOrbital] of Object.entries(dadosPlanetas)) {
+                // Calcula a idade em anos para o planeta atual
+                const idadeEmAnos = idadeTerra * 365.25 / periodoOrbital;
+                let exibicaoIdade;
+
+                // Se a idade for menor que 1 mês (aproximadamente 0.0833 anos), converte para dias
+                if (idadeEmAnos < 0.0833) {
+                    const idadeEmDias = Math.round(idadeEmAnos * 365.25);
+                    exibicaoIdade = `${idadeEmDias} ${idadeEmDias === 1 ? 'dia' : 'dias'}`;
+                }
+                // Se a idade for menor que 1 ano, converte para meses
+                else if (idadeEmAnos < 1) {
+                    const idadeEmMeses = Math.round(idadeEmAnos * 12);
+                    exibicaoIdade = `${idadeEmMeses} ${idadeEmMeses === 1 ? 'mês' : 'meses'}`;
+                } else {
+                    // Caso contrário, mantém em anos e arredonda
+                    const idadeEmAnosInteiros = Math.round(idadeEmAnos);
+                    exibicaoIdade = `${idadeEmAnosInteiros} ${idadeEmAnosInteiros === 1 ? 'ano' : 'anos'}`;
+                }
+
+                // Adiciona o resultado para o planeta atual à div de resultados
+                divResultados.innerHTML += `
+                    <div class="idade-planeta">
+                        <strong>${planeta}:</strong> ${exibicaoIdade}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
